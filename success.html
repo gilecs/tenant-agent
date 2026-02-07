@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application Submitted</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #4caf50;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out;
+        }
+        
+        .checkmark svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: drawCheck 0.5s ease-out 0.3s forwards;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                transform: scale(0);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            color: #666;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .timeline {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .timeline h3 {
+            color: #667eea;
+            font-size: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            align-items: start;
+        }
+        
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        
+        .timeline-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-content p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .screening-box {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .screening-box.warning {
+            background: #fff3e0;
+            border-color: #ff9800;
+        }
+        
+        .screening-box.danger {
+            background: #ffebee;
+            border-color: #f44336;
+        }
+        
+        .screening-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #4caf50;
+            margin: 10px 0;
+        }
+        
+        .screening-score.warning {
+            color: #ff9800;
+        }
+        
+        .screening-score.danger {
+            color: #f44336;
+        }
+        
+        .flags {
+            text-align: left;
+            margin-top: 15px;
+        }
+        
+        .flag-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .flag-item:last-child {
+            border-bottom: none;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark">
+            <svg viewBox="0 0 52 52">
+                <polyline points="14 27 22 35 38 17"/>
+            </svg>
+        </div>
+        
+        <h1>Application Submitted!</h1>
+        <p class="message">
+            Thank you for submitting your rental application. We've received your information and will review it carefully.
+        </p>
+        
+        {% if screening %}
+        <div class="screening-box {% if screening.recommendation == 'deny' %}danger{% elif screening.recommendation == 'review' %}warning{% endif %}">
+            <h3>Initial Screening</h3>
+            <div class="screening-score {% if screening.recommendation == 'deny' %}danger{% elif screening.recommendation == 'review' %}warning{% endif %}">
+                {{ screening.score }}/100
+            </div>
+            <p><strong>Status:</strong> {{ screening.recommendation.upper() }}</p>
+            
+            {% if screening.flags %}
+            <div class="flags">
+                <strong>Notes:</strong>
+                {% for flag in screening.flags %}
+                <div class="flag-item">⚠️ {{ flag }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="timeline">
+            <h3>What Happens Next?</h3>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">1</div>
+                <div class="timeline-content">
+                    <h4>Application Review</h4>
+                    <p>We'll review your application within 24 hours</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">2</div>
+                <div class="timeline-content">
+                    <h4>Background & Credit Check</h4>
+                    <p>We'll verify your information and run standard checks</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">3</div>
+                <div class="timeline-content">
+                    <h4>Decision</h4>
+                    <p>You'll receive our decision via email</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon">4</div>
+                <div class="timeline-content">
+                    <h4>Move-in</h4>
+                    <p>If approved, we'll coordinate your move-in date</p>
+                </div>
+            </div>
+        </div>
+        
+        <p class="message">
+            <strong>Questions?</strong><br>
+            Feel free to reach out via the Facebook Marketplace message where you found this listing.
+        </p>
+        
+        <a href="https://facebook.com/marketplace" class="button">Return to Facebook Marketplace</a>
+    </div>
+</body>
+</html>
