@@ -12,7 +12,7 @@ app = Flask(__name__)
 # Initialize agent with your property details
 # UPDATE THESE WITH YOUR ACTUAL PROPERTY INFORMATION
 property_details = {
-    'address': 'Quincy, MA',
+    'address': 'Quincy, MA, 02169',
     'rent': '3200',
     'bedrooms': '1',
     'bathrooms': '2',
