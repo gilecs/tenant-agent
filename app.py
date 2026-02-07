@@ -17,7 +17,7 @@ property_details = {
     'bedrooms': '1',
     'bathrooms': '2',
     'available_date': 'February 1, 2026',
-    'form_url': 'https://tenant-agent.onrender.com'  # Update with your actual URL when deployed
+    'form_url': 'https://tenant-agent.onrender.com/form'  # Update with your actual URL when deployed
 }
 
 agent = TenantFormAgent(property_details)
